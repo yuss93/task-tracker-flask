@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+  <header>
+    <h1 class="{{ color_class }}">📝 Task Tracker</h1>
+    <div class="progress-bar-container">
+      <div class="progress-bar {{ color_class }}" style="width: {{ percent_complete }}%;">
+        {{ percent_complete }}%
+      </div>
+    </div>
+    <form action="/reset" method="POST" style="float:right;">
+      <button type="submit" class="logout-btn">🔁 Reset (Logout)</button>
+    </form>
+  </header>
+
+  <div class="container">
+    <h2>{{ message }}</h2>
+
+    <!-- Optional: Progress Level Label -->
+    <p style="text-align: center; font-weight: bold;">
+      {% if color_class == 'red' %}🔴 Low Progress
+      {% elif color_class == 'orange' %}🟠 Medium Progress
+      {% else %}🟢 High Progress
+      {% endif %}
+    </p>
+
+    <!-- Add Task Form -->
+    <form method="POST">
+      <input type="text" name="title" placeholder="Enter a new task" required>
+      <select name="status">
+        <option value="Incomplete">Incomplete</option>
+        <option value="Complete">Complete</option>
+      </select>
+      <button type="submit">Add Task</button>
+    </form> 
+    
+    <!-- Task List -->
+    <h3>Tasks:</h3>
+    <ul>
+      {% for task in tasks %}
+        <li class="{% if task[2] == 'Complete' %}completed{% endif %}">
+          <span>{{ task[1] }}</span>
+          <span class="task-icons">
+            <a href="/toggle/{{ task[0] }}" title="Toggle">🔄</a>
+            <a href="/delete/{{ task[0] }}" title="Delete" class="delete">🗑️</>
+            <a href ="/edit/{{ task[0]}}" title="Edit">✏️</a>
+          </span>
+        </li>
+      {% endfor %} 
+    </ul>
+  </div>
+</body>
+</html>

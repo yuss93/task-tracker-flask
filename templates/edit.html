@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Task</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+  <div class="container">
+    <h2>✏️ Edit Task</h2>
+
+    <form method="POST">
+      <input type="text" name="title" value="{{ task[1] }}" required>
+      <select name="status">
+        <option value="Incomplete" {% if task[2] == 'Incomplete' %}selected{% endif %}>Incomplete</option>
+        <option value="Complete" {% if task[2] == 'Complete' %}selected{% endif %}>Complete</option>
+      </select>
+      <button type="submit">Update</button>
+    </form>
+
+    <p><a href="/">⬅️ Back to Task List</a></p>
+  </div>
+</body>
+</html>
